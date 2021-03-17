@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://www.order.com/validate"
+        targetNamespace="http://www.order.com/validate"
+        elementFormDefault="qualified">
+
+    <xs:element name="postOrderRequest">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="ID" type="xs:string"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="postOrderResponse">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="Order" type="tns:ProductOrder"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="ProductOrder">
+            <xs:all>
+                <xs:element name="ID" type="xs:string"/>
+            </xs:all>
+    </xs:complexType>
+
+</xs:schema>
