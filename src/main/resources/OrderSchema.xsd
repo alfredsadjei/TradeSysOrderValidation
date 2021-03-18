@@ -9,6 +9,11 @@
         <xs:complexType>
             <xs:all>
                 <xs:element name="ID" type="xs:string"/>
+                <xs:element name="price" type="xs:double"/>
+                <xs:element name="quantity" type="xs:int"/>
+                <xs:element name="side" type="xs:string"/>
+                <xs:element name="productName" type="xs:string"/>
+                <xs:element name="date" type="xs:string"/>
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -24,6 +29,11 @@
     <xs:complexType name="ProductOrder">
             <xs:all>
                 <xs:element name="ID" type="xs:string"/>
+                <xs:element name="price" type="xs:double"/>
+                <xs:element name="quantity" type="xs:int"/>
+                <xs:element name="side" type="xs:string"/>
+                <xs:element name="productName" type="xs:string"/>
+                <xs:element name="date" type="xs:string"/>
             </xs:all>
     </xs:complexType>
 
