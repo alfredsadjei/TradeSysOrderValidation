@@ -27,8 +27,6 @@ sourceSets {
 
 
 
-
-
 task genJaxb {
 	ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
 	ext.schema = "src/main/resources/OrderSchema.xsd"
