@@ -60,7 +60,8 @@ public class OrderValidationController {
             throw new RedisConnectionFailedException("Connection to redis server failed.");
         }
 
-        redisConnector.set("productOrder",orderSerializer.serialize());
+        //create orderCreated queue and push order onto it
+        redisConnector.lpush("orderCreated",orderSerializer.serialize());
 
         redisConnector.close();
 
