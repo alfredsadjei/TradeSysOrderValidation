@@ -5,6 +5,7 @@ import com.order.validate.ObjectFactory;
 import com.order.validate.PostOrderResponse;
 import com.order.validate.ProductOrder;
 import com.order.validate.PostOrderRequest;
+import org.springframework.core.annotation.Order;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -41,6 +42,10 @@ public class OrderValidationController {
         //with the same id as the request order object confirming that the product order
         // with that particular ID was received.
         response.setOrder(newProductOrderResponse);
+
+        //serialize data and send to redis server
+        OrderSerializer orderSerializer = new OrderSerializer(newProductOrderResponse);
+        System.out.println("This is the serialized order: "+ orderSerializer.serialize());
 
         return response;
     }
