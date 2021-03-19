@@ -16,10 +16,11 @@ public class OrderValidationController {
     private static final String NAMESPACE_URI = "http://www.order.com/validate";
 
 
-
     @PayloadRoot(namespace = NAMESPACE_URI , localPart = "postOrderRequest" )
     @ResponsePayload
     public PostOrderResponse postOrder (@RequestPayload PostOrderRequest request) {
+
+        System.out.println("This is the ID: " + request.toString());
 
         //Creating a new PostOrderResponseObject
         PostOrderResponse response = new PostOrderResponse();
@@ -30,6 +31,11 @@ public class OrderValidationController {
 
         //ID of the new productOrder is set to the ID of the request productOrder
         newProductOrderResponse.setID(request.getID());
+        newProductOrderResponse.setProductName(request.getProductName());
+        newProductOrderResponse.setPrice(request.getPrice());
+        newProductOrderResponse.setQuantity(request.getQuantity());
+        newProductOrderResponse.setSide(request.getSide());
+        newProductOrderResponse.setDate(request.getDate());
 
         //The response (of type PostOrderResponse) then returns the new order object
         //with the same id as the request order object confirming that the product order
