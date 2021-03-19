@@ -1,27 +1,32 @@
 package com.OrderValidation.tradeSystem;
 
 
+import com.OrderValidation.tradeSystem.exceptions.RedisConnectionFailedException;
 import com.order.validate.ObjectFactory;
 import com.order.validate.PostOrderResponse;
 import com.order.validate.ProductOrder;
 import com.order.validate.PostOrderRequest;
-import org.springframework.core.annotation.Order;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import redis.clients.jedis.Jedis;
 
 
 @Endpoint
 public class OrderValidationController {
     private static final String NAMESPACE_URI = "http://www.order.com/validate";
 
+    @Autowired
+    private OrderValRedisClient orderValRedisClient;
+
 
     @PayloadRoot(namespace = NAMESPACE_URI , localPart = "postOrderRequest" )
     @ResponsePayload
     public PostOrderResponse postOrder (@RequestPayload PostOrderRequest request) {
 
-        System.out.println("This is the ID: " + request.toString());
 
         //Creating a new PostOrderResponseObject
         PostOrderResponse response = new PostOrderResponse();
@@ -45,9 +50,22 @@ public class OrderValidationController {
 
         //serialize data and send to redis server
         OrderSerializer orderSerializer = new OrderSerializer(newProductOrderResponse);
-        System.out.println("This is the serialized order: "+ orderSerializer.serialize());
+
+        Jedis redisConnector;
+
+        try {
+            //connect to redis server and send order data
+            redisConnector = orderValRedisClient.connect();
+        }catch (RedisConnectionFailedException rcx){
+            throw new RedisConnectionFailedException("Connection to redis server failed.");
+        }
+
+        redisConnector.set("productOrder",orderSerializer.serialize());
+
+        redisConnector.close();
 
         return response;
+
     }
 
 }

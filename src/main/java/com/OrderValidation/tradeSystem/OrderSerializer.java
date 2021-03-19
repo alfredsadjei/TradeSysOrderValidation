@@ -1,5 +1,7 @@
 package com.OrderValidation.tradeSystem;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.order.validate.ProductOrder;
 
 public class OrderSerializer {
@@ -10,13 +12,14 @@ public class OrderSerializer {
     }
 
     public String serialize (){
-        return "{" +
-                "id: "+this.productOrder.getID()+","+
-                "name: "+this.productOrder.getProductName()+","+
-                "price: "+this.productOrder.getPrice()+","+
-                "quantity: "+this.productOrder.getQuantity()+","+
-                "side: "+this.productOrder.getSide()+","+
-                "date: "+this.productOrder.getDate()+
-                "}";
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            return objectMapper.writeValueAsString(productOrder);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
