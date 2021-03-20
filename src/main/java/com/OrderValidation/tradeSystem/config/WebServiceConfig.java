@@ -1,4 +1,4 @@
-package com.OrderValidation.tradeSystem;
+package com.OrderValidation.tradeSystem.config;
 
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
