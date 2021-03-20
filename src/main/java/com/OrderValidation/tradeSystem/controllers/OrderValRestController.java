@@ -1,5 +1,8 @@
 package com.OrderValidation.tradeSystem.controllers;
 
+import com.OrderValidation.tradeSystem.DTOs.MarketData;
+import com.OrderValidation.tradeSystem.DAOs.MarketDataRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,18 +13,17 @@ import java.util.List;
 @RequestMapping(value = "/md")
 public class OrderValRestController {
 
+    @Autowired
+    MarketDataRepo marketDataRepo;
 
-    @GetMapping(value = "/{ticker}")
-    public ResponseEntity<?> getProductMarketData(@PathVariable("ticker") String ticker){
+    //Endpoint that receives market data updates
+    @PostMapping()
+    public ResponseEntity<List<MarketData>> getMarketData(@RequestBody List<MarketData> marketData){
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        //Sets the new market data whenever an update occurs
+        marketDataRepo.setDataRepository(marketData);
 
-    }
-
-    @GetMapping
-    public ResponseEntity<?> getMarketData(){
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(marketData,HttpStatus.OK);
 
     }
 }

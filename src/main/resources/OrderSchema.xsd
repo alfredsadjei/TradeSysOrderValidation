@@ -34,6 +34,7 @@
                 <xs:element name="side" type="xs:string"/>
                 <xs:element name="productName" type="xs:string"/>
                 <xs:element name="date" type="xs:string"/>
+                <xs:element name="status" type="xs:string"/>
             </xs:all>
     </xs:complexType>
 

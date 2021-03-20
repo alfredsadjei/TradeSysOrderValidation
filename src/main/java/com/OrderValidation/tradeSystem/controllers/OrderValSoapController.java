@@ -1,7 +1,10 @@
-package com.OrderValidation.tradeSystem;
+package com.OrderValidation.tradeSystem.controllers;
 
 
+import com.OrderValidation.tradeSystem.OrderSerializer;
+import com.OrderValidation.tradeSystem.OrderValRedisClient;
 import com.OrderValidation.tradeSystem.exceptions.RedisConnectionFailedException;
+import com.OrderValidation.tradeSystem.services.OrderValidationService;
 import com.order.validate.ObjectFactory;
 import com.order.validate.PostOrderResponse;
 import com.order.validate.ProductOrder;
@@ -16,17 +19,20 @@ import redis.clients.jedis.Jedis;
 
 
 @Endpoint
-public class OrderValidationController {
+public class OrderValSoapController {
     private static final String NAMESPACE_URI = "http://www.order.com/validate";
 
     @Autowired
     private OrderValRedisClient orderValRedisClient;
 
+    //****Validate Order*****
+    @Autowired
+    OrderValidationService orderValidationService;
+
 
     @PayloadRoot(namespace = NAMESPACE_URI , localPart = "postOrderRequest" )
     @ResponsePayload
     public PostOrderResponse postOrder (@RequestPayload PostOrderRequest request) {
-
 
         //Creating a new PostOrderResponseObject
         PostOrderResponse response = new PostOrderResponse();
@@ -43,16 +49,28 @@ public class OrderValidationController {
         newProductOrderResponse.setSide(request.getSide());
         newProductOrderResponse.setDate(request.getDate());
 
+
+        //Check if order is valid
+        if (!orderValidationService.validate(newProductOrderResponse)){
+
+            //set status failed
+            newProductOrderResponse.setStatus("FAIL");
+
+            response.setOrder(newProductOrderResponse);
+
+            return response;
+        }
+
         //The response (of type PostOrderResponse) then returns the new order object
         //with the same id as the request order object confirming that the product order
         // with that particular ID was received.
+        //TODO:Set status to SUCCESS?
         response.setOrder(newProductOrderResponse);
 
-        //serialize data and send to redis server
+        //serialize data for redis server
         OrderSerializer orderSerializer = new OrderSerializer(newProductOrderResponse);
 
         Jedis redisConnector;
-
         try {
             //connect to redis server and send order data
             redisConnector = orderValRedisClient.connect();
@@ -62,7 +80,6 @@ public class OrderValidationController {
 
         //create orderCreated queue and push order onto it
         redisConnector.lpush("orderCreated",orderSerializer.serialize());
-
         redisConnector.close();
 
         return response;
