@@ -28,6 +28,8 @@ public class OrderValidationService {
         //order val rules
         if (productOrder.getSide().equalsIgnoreCase("BUY")){
 
+            //TODO: first make call to db to check if client has enough funds to buy
+
             if (productOrder.getQuantity() > orderMD.getBUY_LIMIT() ||
                     (orderMD.getLAST_TRADED_PRICE() - productOrder.getPrice()) > orderMD.getMAX_PRICE_SHIFT()){
 
@@ -37,6 +39,8 @@ public class OrderValidationService {
             }
 
         }else{
+
+            //TODO: first make call to db and check of client has enough of that product to sell
 
             if (productOrder.getQuantity() > orderMD.getSELL_LIMIT() ||
                     (productOrder.getPrice() - orderMD.getLAST_TRADED_PRICE() ) > orderMD.getMAX_PRICE_SHIFT()){

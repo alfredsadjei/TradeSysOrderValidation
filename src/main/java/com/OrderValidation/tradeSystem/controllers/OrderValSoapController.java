@@ -51,15 +51,15 @@ public class OrderValSoapController {
 
 
         //Check if order is valid
-        if (!orderValidationService.validate(newProductOrderResponse)){
-
-            //set status failed
-            newProductOrderResponse.setStatus("FAIL");
-
-            response.setOrder(newProductOrderResponse);
-
-            return response;
-        }
+//        if (!orderValidationService.validate(newProductOrderResponse)){
+//
+//            //set status failed
+//            newProductOrderResponse.setStatus("FAIL");
+//
+//            response.setOrder(newProductOrderResponse);
+//
+//            return response;
+//        }
 
         //The response (of type PostOrderResponse) then returns the new order object
         //with the same id as the request order object confirming that the product order
@@ -78,8 +78,10 @@ public class OrderValSoapController {
             throw new RedisConnectionFailedException("Connection to redis server failed.");
         }
 
-        //create orderCreated queue and push order onto it
-        redisConnector.lpush("orderCreated",orderSerializer.serialize());
+        //create orderCreated channel publish order onto it
+
+        redisConnector.publish("orderCreated",orderSerializer.serialize());
+
         redisConnector.close();
 
         return response;
