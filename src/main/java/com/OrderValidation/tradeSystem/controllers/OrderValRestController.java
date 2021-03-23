@@ -18,10 +18,20 @@ public class OrderValRestController {
 
     //Endpoint that receives market data updates
     @PostMapping()
-    public ResponseEntity<List<MarketData>> getMarketData(@RequestBody List<MarketData> marketData){
+    public ResponseEntity<List<MarketData>> getMarketData1(@RequestBody List<MarketData> marketData){
 
         //Sets the new market data whenever an update occurs
-        marketDataRepo.setDataRepository(marketData);
+        marketDataRepo.setExchange1DataRepository(marketData);
+
+        return new ResponseEntity<>(marketData,HttpStatus.OK);
+
+    }
+
+    @PostMapping(value = "/2")
+    public ResponseEntity<List<MarketData>> getMarketData2(@RequestBody List<MarketData> marketData){
+
+        //Sets the new market data whenever an update occurs
+        marketDataRepo.setExchange2DataRepository(marketData);
 
         return new ResponseEntity<>(marketData,HttpStatus.OK);
 

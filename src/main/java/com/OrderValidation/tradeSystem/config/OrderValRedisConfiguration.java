@@ -1,11 +1,11 @@
 package com.OrderValidation.tradeSystem.config;
 
-import com.OrderValidation.tradeSystem.OrderValRedisClient;
+import com.OrderValidation.tradeSystem.utils.OrderValRedisClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RedisConfiguration {
+public class OrderValRedisConfiguration {
 
     @Bean
     public OrderValRedisClient redisClientFactory(){

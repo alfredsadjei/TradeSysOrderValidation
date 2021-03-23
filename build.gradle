@@ -68,6 +68,8 @@ dependencies {
 	implementation 'wsdl4j:wsdl4j'
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	implementation group: 'redis.clients', name: 'jedis', version: '3.5.2'
+	implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+	implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 }
 
 test {

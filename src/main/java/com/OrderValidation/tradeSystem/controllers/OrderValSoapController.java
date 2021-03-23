@@ -2,7 +2,7 @@ package com.OrderValidation.tradeSystem.controllers;
 
 
 import com.OrderValidation.tradeSystem.OrderSerializer;
-import com.OrderValidation.tradeSystem.OrderValRedisClient;
+import com.OrderValidation.tradeSystem.utils.OrderValRedisClient;
 import com.OrderValidation.tradeSystem.exceptions.RedisConnectionFailedException;
 import com.OrderValidation.tradeSystem.services.OrderValidationService;
 import com.order.validate.ObjectFactory;
@@ -79,7 +79,6 @@ public class OrderValSoapController {
         }
 
         //create orderCreated channel publish order onto it
-
         redisConnector.publish("orderCreated",orderSerializer.serialize());
 
         redisConnector.close();
