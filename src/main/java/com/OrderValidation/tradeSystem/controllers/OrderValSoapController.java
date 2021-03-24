@@ -1,7 +1,8 @@
 package com.OrderValidation.tradeSystem.controllers;
 
 
-import com.OrderValidation.tradeSystem.OrderSerializer;
+import com.OrderValidation.tradeSystem.OrderValidation;
+import com.OrderValidation.tradeSystem.utils.OrderSerializer;
 import com.OrderValidation.tradeSystem.utils.OrderValRedisClient;
 import com.OrderValidation.tradeSystem.exceptions.RedisConnectionFailedException;
 import com.OrderValidation.tradeSystem.services.OrderValidationService;
@@ -17,6 +18,8 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import redis.clients.jedis.Jedis;
 
+import java.io.IOException;
+
 
 @Endpoint
 public class OrderValSoapController {
@@ -25,9 +28,9 @@ public class OrderValSoapController {
     @Autowired
     private OrderValRedisClient orderValRedisClient;
 
-    //****Validate Order*****
     @Autowired
-    OrderValidationService orderValidationService;
+    private OrderValidationService ovs;
+
 
 
     @PayloadRoot(namespace = NAMESPACE_URI , localPart = "postOrderRequest" )
@@ -41,9 +44,13 @@ public class OrderValSoapController {
         ObjectFactory productOrderFactory = new ObjectFactory();
         ProductOrder newProductOrderResponse = productOrderFactory.createProductOrder();
 
+
         //ID of the new productOrder is set to the ID of the request productOrder
         newProductOrderResponse.setID(request.getID());
         newProductOrderResponse.setProductName(request.getProductName());
+        newProductOrderResponse.setClientId(request.getClientId());
+        newProductOrderResponse.setFunds(request.getFunds());
+        newProductOrderResponse.setQuantityOwned(request.getQuantityOwned());
         newProductOrderResponse.setPrice(request.getPrice());
         newProductOrderResponse.setQuantity(request.getQuantity());
         newProductOrderResponse.setSide(request.getSide());
@@ -51,20 +58,20 @@ public class OrderValSoapController {
 
 
         //Check if order is valid
-//        if (!orderValidationService.validate(newProductOrderResponse)){
-//
-//            //set status failed
-//            newProductOrderResponse.setStatus("FAIL");
-//
-//            response.setOrder(newProductOrderResponse);
-//
-//            return response;
-//        }
+        if (!ovs.validate(newProductOrderResponse)){
+            //set status failed
+            newProductOrderResponse.setStatus("INVALID");
+
+            response.setOrder(newProductOrderResponse);
+
+            return response;
+        }
 
         //The response (of type PostOrderResponse) then returns the new order object
         //with the same id as the request order object confirming that the product order
         // with that particular ID was received.
         //TODO:Set status to SUCCESS?
+        newProductOrderResponse.setStatus("VALID");
         response.setOrder(newProductOrderResponse);
 
         //serialize data for redis server
@@ -79,7 +86,8 @@ public class OrderValSoapController {
         }
 
         //create orderCreated channel publish order onto it
-        redisConnector.publish("orderCreated",orderSerializer.serialize());
+        //redisConnector.publish("orderCreatedT",orderSerializer.serialize());
+
 
         redisConnector.close();
 
