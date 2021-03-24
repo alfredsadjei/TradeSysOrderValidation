@@ -86,7 +86,7 @@ public class OrderValSoapController {
         }
 
         //create orderCreated channel publish order onto it
-        //redisConnector.publish("orderCreatedT",orderSerializer.serialize());
+        redisConnector.publish("orderCreatedT",orderSerializer.serialize());
 
 
         redisConnector.close();
