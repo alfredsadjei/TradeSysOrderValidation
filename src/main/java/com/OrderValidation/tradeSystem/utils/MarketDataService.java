@@ -10,4 +10,5 @@ import java.util.List;
 public interface MarketDataService {
     @GET
     Call<List<MarketData>> getMarketData(@Url String url);
+
 }

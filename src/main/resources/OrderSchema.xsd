@@ -10,6 +10,9 @@
             <xs:all>
                 <xs:element name="ID" type="xs:string"/>
                 <xs:element name="price" type="xs:double"/>
+                <xs:element name="clientId" type="xs:long"/>
+                <xs:element name="funds" type="xs:double"/>
+                <xs:element name="quantityOwned" type="xs:int"/>
                 <xs:element name="quantity" type="xs:int"/>
                 <xs:element name="side" type="xs:string"/>
                 <xs:element name="productName" type="xs:string"/>
@@ -30,6 +33,9 @@
             <xs:all>
                 <xs:element name="ID" type="xs:string"/>
                 <xs:element name="price" type="xs:double"/>
+                <xs:element name="clientId" type="xs:long"/>
+                <xs:element name="funds" type="xs:double"/>
+                <xs:element name="quantityOwned" type="xs:int"/>
                 <xs:element name="quantity" type="xs:int"/>
                 <xs:element name="side" type="xs:string"/>
                 <xs:element name="productName" type="xs:string"/>

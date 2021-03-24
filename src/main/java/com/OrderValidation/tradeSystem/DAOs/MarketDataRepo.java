@@ -45,7 +45,11 @@ public class MarketDataRepo implements ApplicationRunner {
             Call<List<MarketData>> md1 = mdService.getMarketData("https://exchange.matraining.com/md");
             Call<List<MarketData>> md2 = mdService.getMarketData("https://exchange2.matraining.com/md");
 
+
+
             exchange1DataRepository = md1.execute().body();
             exchange2DataRepository = md2.execute().body();
+
+
     }
 }
