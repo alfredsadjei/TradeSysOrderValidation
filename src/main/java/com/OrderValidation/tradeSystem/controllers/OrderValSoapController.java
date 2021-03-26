@@ -52,7 +52,7 @@ public class OrderValSoapController {
         newProductOrderResponse.setPrice(request.getPrice());
         newProductOrderResponse.setQuantity(request.getQuantity());
         newProductOrderResponse.setSide(request.getSide());
-        newProductOrderResponse.setDate(request.getDate());
+
 
 
         //Check if order is valid
