@@ -14,7 +14,6 @@ public class OrderValRedisClient {
         this.port = port;
     }
 
-
     public Jedis connect(){
             if (this.jedis == null) {
 

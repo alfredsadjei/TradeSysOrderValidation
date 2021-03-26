@@ -16,7 +16,6 @@ public class MarketDataRepo implements ApplicationRunner {
 
     public MarketDataRepo(){ }
 
-
     public List<MarketData> getExchange1DataRepository() {
         return exchange1DataRepository;
     }
