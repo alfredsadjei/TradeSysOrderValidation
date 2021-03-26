@@ -6,7 +6,6 @@ import com.OrderValidation.tradeSystem.DTOs.MarketData;
 import com.order.validate.ProductOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 
 @Component

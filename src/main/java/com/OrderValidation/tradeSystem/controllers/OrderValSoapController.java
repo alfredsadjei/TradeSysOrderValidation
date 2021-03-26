@@ -47,7 +47,6 @@ public class OrderValSoapController {
 
         //ID of the new productOrder is set to the ID of the request productOrder
         newProductOrderResponse.setProductName(request.getProductName());
-        newProductOrderResponse.setClientId(request.getClientId());
         newProductOrderResponse.setFunds(request.getFunds());
         newProductOrderResponse.setQuantityOwned(request.getQuantityOwned());
         newProductOrderResponse.setPrice(request.getPrice());
