@@ -8,7 +8,6 @@
     <xs:element name="postOrderRequest">
         <xs:complexType>
             <xs:all>
-                <xs:element name="ID" type="xs:string"/>
                 <xs:element name="price" type="xs:double"/>
                 <xs:element name="clientId" type="xs:long"/>
                 <xs:element name="funds" type="xs:double"/>
@@ -31,7 +30,6 @@
 
     <xs:complexType name="ProductOrder">
             <xs:all>
-                <xs:element name="ID" type="xs:string"/>
                 <xs:element name="price" type="xs:double"/>
                 <xs:element name="clientId" type="xs:long"/>
                 <xs:element name="funds" type="xs:double"/>
@@ -41,6 +39,7 @@
                 <xs:element name="productName" type="xs:string"/>
                 <xs:element name="date" type="xs:string"/>
                 <xs:element name="status" type="xs:string"/>
+                <xs:element name="exchange" type="xs:string" minOccurs="0"/>
             </xs:all>
     </xs:complexType>
 

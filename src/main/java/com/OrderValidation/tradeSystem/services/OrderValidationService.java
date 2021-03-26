@@ -6,14 +6,17 @@ import com.OrderValidation.tradeSystem.DTOs.MarketData;
 import com.order.validate.ProductOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 
 @Component
 public class OrderValidationService {
 
+    private String exchanges;
     //Get market data from the repo
     @Autowired
     MarketDataRepo marketDataRepo;
+
 
     public boolean validate(ProductOrder productOrder){
 
@@ -36,6 +39,16 @@ public class OrderValidationService {
 
         //order val rules
         if (isValidOrder(productOrder,orderMD1) && isValidOrder(productOrder,orderMD2)){
+            //valid on both exchanges
+            this.exchanges = "both";
+            result = true;
+        }else if (!isValidOrder(productOrder,orderMD1) && isValidOrder(productOrder,orderMD2)){
+            //valid on exchange 2
+            this.exchanges = "ex2";
+            result = true;
+        }else if (isValidOrder(productOrder,orderMD1) && !isValidOrder(productOrder,orderMD2)){
+            //valid on exchange 1
+            this.exchanges = "ex1";
             result = true;
         }
 
@@ -81,6 +94,10 @@ public class OrderValidationService {
 
     private boolean isValidOrder( ProductOrder order, MarketData md){
         return isPriceReasonable(order, md) && isQuantityValid(order, md) && hasEnoughResources(order);
+    }
+
+    public String getExchange() {
+        return exchanges;
     }
 
 

@@ -46,7 +46,6 @@ public class OrderValSoapController {
 
 
         //ID of the new productOrder is set to the ID of the request productOrder
-        newProductOrderResponse.setID(request.getID());
         newProductOrderResponse.setProductName(request.getProductName());
         newProductOrderResponse.setClientId(request.getClientId());
         newProductOrderResponse.setFunds(request.getFunds());
@@ -60,9 +59,25 @@ public class OrderValSoapController {
         //Check if order is valid
         if (!ovs.validate(newProductOrderResponse)){
             //set status failed
-            newProductOrderResponse.setStatus("INVALID");
+            newProductOrderResponse.setStatus("REJECTED");
 
             response.setOrder(newProductOrderResponse);
+
+            //serialize data for redis server
+            OrderSerializer orderSerializer = new OrderSerializer(newProductOrderResponse);
+
+            Jedis redisConnector;
+            try {
+                //connect to redis server and send order data
+                redisConnector = orderValRedisClient.connect();
+            }catch (RedisConnectionFailedException rcx){
+                throw new RedisConnectionFailedException("Connection to redis server failed.");
+            }
+
+            //create orderCreated channel publish order onto it
+            redisConnector.publish("orderFailed",orderSerializer.serialize());
+
+            redisConnector.close();
 
             return response;
         }
@@ -71,7 +86,8 @@ public class OrderValSoapController {
         //with the same id as the request order object confirming that the product order
         // with that particular ID was received.
         //TODO:Set status to SUCCESS?
-        newProductOrderResponse.setStatus("VALID");
+        newProductOrderResponse.setExchange(ovs.getExchange());
+        newProductOrderResponse.setStatus("CREATED");
         response.setOrder(newProductOrderResponse);
 
         //serialize data for redis server
@@ -87,7 +103,6 @@ public class OrderValSoapController {
 
         //create orderCreated channel publish order onto it
         redisConnector.publish("orderCreatedT",orderSerializer.serialize());
-
 
         redisConnector.close();
 
